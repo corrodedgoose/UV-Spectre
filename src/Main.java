@@ -95,13 +95,11 @@ public class Main {
                         Thread.sleep(50);
                     }catch(InterruptedException e){}
                 }
-                System.out.println("");
+                System.out.println();
             }
 
 //            System.out.print("Download Completed. Exiting Now . . .");
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+        }catch(IOException _){}
 
     }
 }
