@@ -1,33 +1,43 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class Main {
     public static void main(String[] args) {
         int totalSteps = 100;
 
+        // Print the static Header or Logo one time
+//        printUV();
+        printHeader();
+
         for (int i = 0; i <= totalSteps; i++) {
             printProgressBar(i, totalSteps);
             try {
-                // Simulating some work
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
-        System.out.println("\nTask completed!");
+//        System.out.println("\nTask completed!");
+//        System.out.flush();
+        System.out.println(" ");
+        printTail();
     }
 
     public static void printProgressBar(int current, int total) {
-        int barLength = 100; // Total width of the progress bar in characters
+        int barLength = 50;
         double percentage = (double) current / total;
         int completedLength = (int) (percentage * barLength);
 
         StringBuilder sb = new StringBuilder();
-        sb.append("\r["); // \r moves the cursor to the beginning of the line
+        sb.append("\r[");
 
-        // Fill completed progress
         for (int i = 0; i < barLength; i++) {
             if (i < completedLength) {
                 sb.append("#");
             } else if (i == completedLength && current < total) {
-                sb.append(">"); // Optional arrowhead marker
+                sb.append(">");
             } else {
                 sb.append(" ");
             }
@@ -35,29 +45,63 @@ public class Main {
 
         sb.append(String.format("] %d%% (%d/%d)", (int) (percentage * 100), current, total));
 
-        System.out.print(printUV());
-//        System.out.flush();
-        // Print the string and flush the stream to make it instantly visible
+        // 2. Print ONLY the progress bar inline and flush
         System.out.print(sb.toString());
         System.out.flush();
     }
 
-    public static String printUV(){
-        StringBuilder sb = new StringBuilder();
-        final String[] UV_LOGO = {"__/\\\\\\________/\\\\\\__/\\\\\\________/\\\\\\_        ",
-                "\r _\\/\\\\\\_______\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_       ",
-                "\r  _\\/\\\\\\_______\\/\\\\\\_\\//\\\\\\______/\\\\\\__      ",
-                "\r   _\\/\\\\\\_______\\/\\\\\\__\\//\\\\\\____/\\\\\\___     ",
-                "\r    _\\/\\\\\\_______\\/\\\\\\___\\//\\\\\\__/\\\\\\____    ",
-                "\r     _\\/\\\\\\_______\\/\\\\\\____\\//\\\\\\/\\\\\\_____   ",
-                "\r      _\\//\\\\\\______/\\\\\\______\\//\\\\\\\\\\______  ",
-                "\r       __\\///\\\\\\\\\\\\\\\\\\/________\\//\\\\\\_______ ",
-                "\r        ____\\/////////___________\\///________"
+    public static void printUV(){
+        String[] UV_LOGO = {
+                "__/\\\\\\________/\\\\\\__/\\\\\\________/\\\\\\_        ",
+                " _\\/\\\\\\_______\\/\\\\\\_\\/\\\\\\_______\\/\\\\\\_       ",
+                "  _\\/\\\\\\_______\\/\\\\\\_\\//\\\\\\______/\\\\\\__      ",
+                "   _\\/\\\\\\_______\\/\\\\\\__\\//\\\\\\____/\\\\\\___     ",
+                "    _\\/\\\\\\_______\\/\\\\\\___\\//\\\\\\__/\\\\\\____    ",
+                "     _\\/\\\\\\_______\\/\\\\\\____\\//\\\\\\/\\\\\\_____   ",
+                "      _\\//\\\\\\______/\\\\\\______\\//\\\\\\\\\\______  ",
+                "       __\\///\\\\\\\\\\\\\\\\\\/________\\//\\\\\\_______ ",
+                "        ____\\/////////___________\\///________"
         };
 
         for(String logo : UV_LOGO){
-            sb.append(logo);
+            System.out.println(logo);
         }
-        return sb.toString();
+    }
+
+    public static void printHeader(){
+        String[] HEADER = { "     ||======***==========***===*===========*====*====||",
+                "     || ***-*\\\\\\********            *********///*-*** ||",
+                "     || --------       -SYS7EM 3RR0R_   _-    ------- ||",
+                "     || ***-*///********            *********\\\\\\*-*** ||",
+                "     ||==**========*========***==========***===*======||"
+
+        };
+
+        for(String line : HEADER){
+            System.out.println(line);
+        }
+    }
+
+    public static void printTail(){
+        String filePath = "src/resources/output.txt";
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(filePath))){
+            StringBuilder sb = new StringBuilder();
+            for(String line : reader.readAllLines()){
+//                System.out.println(line);
+                for(Character c : line.toCharArray()){
+                    System.out.print(c);
+                    try{
+                        Thread.sleep(50);
+                    }catch(InterruptedException e){}
+                }
+                System.out.println("");
+            }
+
+//            System.out.print("Download Completed. Exiting Now . . .");
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
     }
 }
